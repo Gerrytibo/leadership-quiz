@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Personality Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f9f5f0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #8b4789;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #8b4789;
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .intro-section {
+            margin-bottom: 30px;
+        }
+        
+        .benefits {
+            background: #f0e6ef;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .benefits h3 {
+            color: #8b4789;
+            margin-bottom: 15px;
+        }
+        
+        .benefits p {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .benefits p:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #8b4789;
+            font-weight: bold;
+        }
+        
+        .how-it-works {
+            background: #e8f4f8;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .how-it-works h3 {
+            color: #2c7a9e;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            background: #8b4789;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #6d3669;
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .question-container {
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #8b4789;
+            transition: width 0.3s;
+        }
+        
+        .question-number {
+            color: #8b4789;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 1.3em;
+            margin-bottom: 25px;
+            color: #333;
+        }
+        
+        .answer-option {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .answer-option:hover {
+            background: #f0e6ef;
+            border-color: #8b4789;
+        }
+        
+        .answer-option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .answer-option label {
+            cursor: pointer;
+            display: block;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .results-container {
+            display: none;
+        }
+        
+        .results-container.active {
+            display: block;
+        }
+        
+        .graph-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 30px auto;
+            position: relative;
+        }
+        
+        canvas {
+            border: 2px solid #333;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .result-title {
+            text-align: center;
+            color: #8b4789;
+            font-size: 2.2em;
+            margin: 30px 0 20px;
+        }
+        
+        .result-description {
+            background: #f0e6ef;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .result-description h3 {
+            color: #8b4789;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .result-description p {
+            margin-bottom: 15px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Introduction Section -->
+        <div id="intro" class="intro-section">
+            <h1>Discover Your Leadership Personality</h1>
+            
+            <p style="font-size: 1.2em; text-align: center; margin: 20px 0; color: #555;">
+                For women who are ready to lead with authenticity and power
+            </p>
+            
+            <div class="benefits">
+                <h3>Why Take This Quiz?</h3>
+                <p>Understand your unique leadership strengths during this transformative life stage</p>
+                <p>Gain clarity on how you naturally lead in both professional and family roles</p>
+                <p>Discover strategies that align with your authentic leadership style</p>
+                <p>Embrace the power you've always had—and claim even more</p>
+            </div>
+            
+            <div class="how-it-works">
+                <h3>How It Works</h3>
+                <p><strong>24 Questions:</strong> You'll answer thoughtful either/or questions about your leadership approach</p>
+                <p><strong>5 Minutes:</strong> This takes just a few minutes of focused reflection</p>
+                <p><strong>Your Results:</strong> You'll receive one of four leadership personality types (or a hybrid if you're on the boundary)</p>
+                <p><strong>One Question at a Time:</strong> Take your time with each question—there are no wrong answers</p>
+            </div>
+            
+            <button class="btn" onclick="startQuiz()">Begin Your Journey</button>
+        </div>
+        
+        <!-- Quiz Section -->
+        <div id="quiz" class="hidden">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div id="questionContainer"></div>
+            
+            <div class="navigation-buttons">
+                <button class="btn-secondary" id="prevBtn" onclick="previousQuestion()" style="visibility: hidden;">Previous</button>
+                <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="results" class="results-container">
+            <h2 style="text-align: center;">Your Leadership Personality</h2>
+            
+            <div class="graph-container">
+                <canvas id="resultGraph" width="500" height="500"></canvas>
+            </div>
+            
+            <h2 class="result-title" id="resultTitle"></h2>
+            
+            <div class="result-description" id="resultDescription"></div>
+            
+            <button class="btn" onclick="restartQuiz()">Take Quiz Again</button>
+        </div>
+    </div>
+    
+    <script>
+        const questions = [
+            {question: "When taking on a new leadership role, what matters most to you?", options: [{text: "Defining clear goals and measurable outcomes", score: {x: -1, y: 0}}, {text: "Building strong relationships with my team", score: {x: 1, y: 0}}]},
+            {question: "At a family gathering where tensions are rising, I typically:", options: [{text: "Address the issue directly and expect others to do the same", score: {x: 0, y: 1}}, {text: "Find ways to ease the tension and keep everyone comfortable", score: {x: 0, y: -1}}]},
+            {question: "When I envision my legacy, I see:", options: [{text: "Concrete achievements and systems I've built that outlast me", score: {x: -1, y: 0}}, {text: "The people I've mentored and the relationships I've nurtured", score: {x: 1, y: 0}}]},
+            {question: "In meetings, I'm more likely to:", options: [{text: "Push for decisions and action, even if not everyone agrees yet", score: {x: 0, y: 1}}, {text: "Ensure everyone's voice is heard before moving forward", score: {x: 0, y: -1}}]},
+            {question: "When managing a project deadline, my priority is:", options: [{text: "Delivering results on time, even if it means making tough calls", score: {x: -1, y: 0}}, {text: "Maintaining team morale and ensuring no one feels burned out", score: {x: 1, y: 0}}]},
+            {question: "If someone challenges my decision, I:", options: [{text: "Stand firm and clearly defend my position", score: {x: 0, y: 1}}, {text: "Listen carefully and look for common ground", score: {x: 0, y: -1}}]},
+            {question: "I feel most energized when:", options: [{text: "I'm solving complex problems and achieving ambitious targets", score: {x: -1, y: 0}}, {text: "I'm connecting with others and creating a positive environment", score: {x: 1, y: 0}}]},
+            {question: "When conflict arises in my team, I:", options: [{text: "Address it head-on with direct conversation", score: {x: 0, y: 1}}, {text: "Create space for people to work through it together", score: {x: 0, y: -1}}]},
+            {question: "As the emerging family matriarch, I focus on:", options: [{text: "Making sure practical matters are handled and decisions are made", score: {x: -1, y: 0}}, {text: "Keeping everyone connected and maintaining family bonds", score: {x: 1, y: 0}}]},
+            {question: "When I say 'no' to requests, I:", options: [{text: "Do it clearly and directly without over-explaining", score: {x: 0, y: 1}}, {text: "Soften it with explanation and alternative suggestions", score: {x: 0, y: -1}}]},
+            {question: "My leadership style is best described as:", options: [{text: "Results-driven and strategic", score: {x: -1, y: 0}}, {text: "Relationship-oriented and collaborative", score: {x: 1, y: 0}}]},
+            {question: "When someone isn't performing well, I:", options: [{text: "Give direct, honest feedback about what needs to change", score: {x: 0, y: 1}}, {text: "Explore what's happening for them and support their development", score: {x: 0, y: -1}}]},
+            {question: "I measure my success by:", options: [{text: "Tangible outcomes and goals I've accomplished", score: {x: -1, y: 0}}, {text: "The positive impact I've had on people's lives", score: {x: 1, y: 0}}]},
+            {question: "When facing resistance to change, I:", options: [{text: "Push forward with conviction and clear direction", score: {x: 0, y: 1}}, {text: "Bring people along by addressing their concerns", score: {x: 0, y: -1}}]},
+            {question: "At this stage of life, I'm most committed to:", options: [{text: "Achieving the ambitious goals I've set for myself", score: {x: -1, y: 0}}, {text: "Creating meaningful connections and community", score: {x: 1, y: 0}}]},
+            {question: "When I disagree with someone, I:", options: [{text: "Express my viewpoint clearly and expect the same in return", score: {x: 0, y: 1}}, {text: "Find diplomatic ways to share my perspective", score: {x: 0, y: -1}}]},
+            {question: "I'm drawn to leadership opportunities that involve:", options: [{text: "Driving strategy and delivering transformational results", score: {x: -1, y: 0}}, {text: "Developing people and building strong teams", score: {x: 1, y: 0}}]},
+            {question: "When making important decisions, I prioritize:", options: [{text: "What will be most effective and efficient", score: {x: -1, y: 0}}, {text: "How it will affect the people involved", score: {x: 1, y: 0}}]},
+            {question: "In tense situations, people would say I:", options: [{text: "Stay focused on the goal and don't shy away from difficulty", score: {x: 0, y: 1}}, {text: "Work to de-escalate and find solutions everyone can accept", score: {x: 0, y: -1}}]},
+            {question: "The next chapter of my life is about:", options: [{text: "Building something significant and proving what I'm capable of", score: {x: -1, y: 0}}, {text: "Nurturing the people and causes that matter most to me", score: {x: 1, y: 0}}]},
+            {question: "When giving feedback, I:", options: [{text: "Get straight to the point with clarity and candor", score: {x: 0, y: 1}}, {text: "Take time to frame it supportively and constructively", score: {x: 0, y: -1}}]},
+            {question: "My ideal work environment focuses on:", options: [{text: "Excellence, innovation, and measurable achievement", score: {x: -1, y: 0}}, {text: "Collaboration, support, and shared success", score: {x: 1, y: 0}}]},
+            {question: "When others look to me for guidance, I:", options: [{text: "Provide clear direction and expect accountability", score: {x: 0, y: 1}}, {text: "Listen deeply and help them find their own answers", score: {x: 0, y: -1}}]},
+            {question: "As I claim more of what I want from life, I do it by:", options: [{text: "Setting bold targets and going after them with determination", score: {x: -1, y: 0}}, {text: "Creating opportunities that uplift myself and others together", score: {x: 1, y: 0}}]}
+        ];
+
+        let currentQuestion = 0;
+        let answers = [];
+
+        function startQuiz() {
+            document.getElementById('intro').classList.add('hidden');
+            document.getElementById('quiz').classList.remove('hidden');
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const container = document.getElementById('questionContainer');
+            const question = questions[currentQuestion];
+            
+            container.innerHTML = `
+                <div class="question-number">Question ${currentQuestion + 1} of ${questions.length}</div>
+                <div class="question-text">${question.question}</div>
+                <div class="answer-option" onclick="selectAnswer(0)">
+                    <input type="radio" name="answer" id="option0" value="0">
+                    <label for="option0">${question.options[0].text}</label>
+                </div>
+                <div class="answer-option" onclick="selectAnswer(1)">
+                    <input type="radio" name="answer" id="option1" value="1">
+                    <label for="option1">${question.options[1].text}</label>
+                </div>
+            `;
+            
+            updateProgress();
+            updateNavigationButtons();
+            
+            if (answers[currentQuestion] !== undefined) {
+                document.getElementById(`option${answers[currentQuestion]}`).checked = true;
+                document.getElementById('nextBtn').disabled = false;
+            }
+        }
+
+        function selectAnswer(optionIndex) {
+            document.getElementById(`option${optionIndex}`).checked = true;
+            answers[currentQuestion] = optionIndex;
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.style.visibility = currentQuestion > 0 ? 'visible' : 'hidden';
+            nextBtn.textContent = currentQuestion === questions.length - 1 ? 'See Results' : 'Next';
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+                document.getElementById('nextBtn').disabled = true;
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        function showResults() {
+            let xScore = 0;
+            let yScore = 0;
+            
+            answers.forEach((answerIndex, questionIndex) => {
+                const score = questions[questionIndex].options[answerIndex].score;
+                xScore += score.x;
+                yScore += score.y;
+            });
+            
+            document.getElementById('quiz').classList.add('hidden');
+            document.getElementById('results').classList.add('active');
+            
+            drawGraph(xScore, yScore);
+            
+            const personality = determinePersonality(xScore, yScore);
+            
+            document.getElementById('resultTitle').textContent = personality.title;
+            document.getElementById('resultDescription').innerHTML = personality.description;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function drawGraph(xScore, yScore) {
+            const canvas = document.getElementById('resultGraph');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#f9f9f9';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffe6e6';
+            ctx.fillRect(0, 0, centerX, centerY);
+            ctx.fillStyle = '#e6f3ff';
+            ctx.fillRect(centerX, 0, centerX, centerY);
+            ctx.fillStyle = '#fff4e6';
+            ctx.fillRect(0, centerY, centerX, centerY);
+            ctx.fillStyle = '#e6ffe6';
+            ctx.fillRect(centerX, centerY, centerX, centerY);
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(canvas.width, centerY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, canvas.height);
+            ctx.stroke();
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('ASSERTIVE', centerX, 20);
+            ctx.fillText('HARMONIOUS', centerX, canvas.height - 10);
+            ctx.save();
+            ctx.translate(15, centerY);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('TASK', 0, 0);
+            ctx.restore();
+            ctx.save();
+            ctx.translate(canvas.width - 15, centerY);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('PEOPLE', 0, 0);
+            ctx.restore();
+            ctx.font = 'bold 16px Arial';
+            ctx.fillStyle = '#8b4789';
+            ctx.fillText('COMPETITOR', centerX / 2, centerY / 2);
+            ctx.fillText('SOCIALISER', centerX + centerX / 2, centerY / 2);
+            ctx.fillText('ACHIEVER', centerX / 2, centerY + centerY / 2);
+            ctx.fillText('PEACEMAKER', centerX + centerX / 2, centerY + centerY / 2);
+            const dotX = centerX + (xScore / 12) * (centerX - 30);
+            const dotY = centerY - (yScore / 12) * (centerY - 30);
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(dotX, dotY, 10, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+
+        function determinePersonality(xScore, yScore) {
+            const threshold = 2;
+            if (Math.abs(xScore) <= threshold && Math.abs(yScore) <= threshold) {
+                return {title: "The Versatile Leader", description: "<p>You sit at the center of all four leadership styles, which makes you remarkably adaptable and balanced. You have the rare ability to shift seamlessly between task focus and people focus, between assertiveness and harmony, depending on what the situation demands.</p><h3>Your Unique Strengths</h3><p>You draw from all four leadership personalities—the Competitor's drive, the Socialiser's connection, the Achiever's discipline, and the Peacemaker's wisdom. This makes you exceptionally versatile in different contexts and with different people.</p><h3>At This Stage of Life</h3><p>Your balanced approach serves you beautifully as you navigate both professional leadership and family matriarch roles. You can be firm when needed, nurturing when called for, strategic when required, and collaborative when it matters. This adaptability is your superpower.</p><h3>Your Leadership Edge</h3><p>Others see you as someone who 'gets it' from multiple angles. You can relate to different personality types and adapt your approach accordingly. Your challenge is to ensure you're not constantly accommodating others at the expense of your own clarity about what you truly want.</p><h3>Moving Forward</h3><p>Embrace your versatility while also getting clear on which approach feels most authentically 'you' in different areas of your life. You don't have to be everything to everyone—your power lies in choosing consciously which aspects of your leadership to bring forward in each situation.</p>"};
+            }
+            if (Math.abs(xScore) <= threshold && yScore > threshold) {
+                return {title: "The Assertive Catalyst", description: "<p>You bridge the Competitor and Socialiser styles, bringing assertive energy whether you're focused on tasks or people. You're direct, action-oriented, and unafraid to make things happen.</p><h3>Your Unique Strengths</h3><p>You combine the best of both worlds—you can drive results with determination while also rallying people with charisma and conviction. You're not afraid to speak up, make the tough call, or shake things up when needed.</p><h3>At This Stage of Life</h3><p>You're done playing small. Whether you're pushing for business results or leading family decisions, you bring clarity and courage. People know where they stand with you, and you create momentum wherever you go.</p><h3>Your Leadership Edge</h3><p>You get things moving. You're the woman who says 'enough talk, let's do this' and makes it happen. Your directness cuts through ambiguity and your energy inspires action in others.</p><h3>Moving Forward</h3><p>Balance your natural assertiveness with strategic pauses to ensure everyone's on board. Your power is undeniable—use it to create change that lasts by bringing people along on the journey with you.</p>"};
+            }
+            if (Math.abs(xScore) <= threshold && yScore < -threshold) {
+                return {title: "The Harmonious Builder", description: "<p>You blend the Achiever and Peacemaker styles, creating results through collaboration and maintaining harmony while driving progress. You believe that the best outcomes come when everyone is aligned and supported.</p><h3>Your Unique Strengths</h3><p>You achieve goals without burning bridges. You build systems and deliver results while ensuring people feel valued and heard. Your diplomatic approach creates sustainable success that doesn't depend on force or pressure.</p><h3>At This Stage of Life</h3><p>You're claiming your power in a way that honors your values. You don't need to adopt aggressive tactics to lead effectively—your strength lies in bringing people together around shared goals and creating win-win outcomes.</p><h3>Your Leadership Edge</h3><p>You create environments where excellence and kindness coexist. People trust you because you genuinely care about both the outcome and their experience getting there. Your leadership feels inclusive and empowering.</p><h3>Moving Forward</h3><p>Don't mistake your collaborative approach for weakness—it's actually your greatest strength. Continue to advocate for yourself and your vision while maintaining the harmony that makes you such an effective leader. You don't have to choose between being liked and being respected—you can have both.</p>"};
+            }
+            if (xScore < -threshold && Math.abs(yScore) <= threshold) {
+                return {title: "The Strategic Driver", description: "<p>You combine Competitor and Achiever qualities, maintaining laser focus on goals and outcomes. Whether through direct action or systematic planning, you're all about getting results and building something that lasts.</p><h3>Your Unique Strengths</h3><p>You have exceptional clarity about what needs to be done and the discipline to see it through. You can be both bold and methodical, pushing hard when needed and planning strategically when that serves better.</p><h3>At This Stage of Life</h3><p>You're ready to build the legacy you've been envisioning. You have the experience, the skills, and the drive to create something significant. You're not interested in small thinking—you want measurable impact.</p><h3>Your Leadership Edge</h3><p>You deliver. People know that when you commit to something, it gets done—and done well. Your combination of strategic thinking and determined execution makes you a formidable force in any endeavor.</p><h3>Moving Forward</h3><p>Remember that the people implementing your vision need more than just clear directions—they need connection too. Balance your task focus with relationship building, not because you have to, but because it will amplify your already impressive results.</p>"};
+            }
+            if (xScore > threshold && Math.abs(yScore) <= threshold) {
+                return {title: "The Empowering Connector", description: "<p>You bridge the Socialiser and Peacemaker styles, putting people at the heart of everything you do. Whether rallying others with enthusiasm or creating harmony through understanding, relationships are your superpower.</p><h3>Your Unique Strengths</h3><p>You have an exceptional ability to see people—really see them—and bring out the best in everyone. You can energize a room and also provide the calm, steady presence that helps people feel safe and valued.</p><h3>At This Stage of Life</h3><p>You're stepping into your role as a leader who lifts others up. Your influence comes not from force but from genuine connection and the trust you've built. You understand that real power lies in empowering others.</p><h3>Your Leadership Edge</h3><p>People want to follow you because they feel better around you. You create environments where people thrive, collaborate, and support each other. Your leadership multiplies talent and builds loyalty that lasts.</p><h3>Moving Forward</h3><p>Don't let your focus on others eclipse your own ambitions. You can be devoted to people AND pursue bold goals for yourself. Your people-centered approach is the foundation for tremendous achievement—now build your own dreams on that foundation.</p>"};
+            }
+            if (xScore < -threshold && yScore > threshold) {
+                return {title: "The Competitor", description: "<p>You are task-focused and assertive—a powerhouse who drives results with determination and directness. You see the goal, chart the path, and make it happen. You're not afraid of challenge; in fact, you thrive on it.</p><h3>Your Strengths</h3><p><strong>Decisive:</strong> You make tough calls quickly and stand by them<br><strong>Results-oriented:</strong> You keep your eye on the prize and push through obstacles<br><strong>Bold:</strong> You're willing to take risks others won't<br><strong>Direct:</strong> People always know where they stand with you</p><h3>At This Life Stage</h3><p>You're done waiting for permission. After years of proving yourself, you're ready to take what's yours and build the legacy you've been planning. Menopause hasn't slowed you down—if anything, it's freed you from caring what others think. You've got clarity, confidence, and the courage to go big.</p><h3>Your Leadership Approach</h3><p>You lead by setting the standard and expecting excellence. You're the woman who walks into a room and changes the energy—people sit up straighter because they know you mean business. In your family, you're the one who makes the hard decisions and handles what needs handling.</p><h3>Watch Out For</h3><p>Sometimes your drive for results can leave people feeling steamrolled. Not everyone moves at your pace or shares your appetite for challenge. Consider slowing down occasionally to bring others along—not because you need to, but because your impact multiplies when people feel included in your vision rather than just directed by it.</p><h3>Your Next Chapter</h3><p>This is your time to build something significant. Whether it's a business, a movement, or transforming your family dynamics, you have the strength to create lasting change. Channel that competitive fire toward the legacy you want to leave—and don't apologize for wanting it all.</p>"};
+            }
+            if (xScore > threshold && yScore > threshold) {
+                return {title: "The Socialiser", description: "<p>You are people-focused and assertive—a dynamic leader who energizes others and builds powerful connections. You lead through influence, enthusiasm, and the genuine relationships you create. Your charisma is your currency.</p><h3>Your Strengths</h3><p><strong>Inspiring:</strong> You rally people around a vision and make them believe<br><strong>Persuasive:</strong> You know how to get buy-in and create momentum<br><strong>Authentic:</strong> Your passion is contagious because it's real<br><strong>Bold:</strong> You're not afraid to speak up and champion what
